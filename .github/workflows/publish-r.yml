@@ -1,0 +1,56 @@
+# Builds and checks the R package when a tag like r-v0.1.0 is pushed.
+#
+# CRAN has no upload API: this workflow does NOT submit to CRAN. It produces
+# a checked sdcalc_X.Y.Z.tar.gz, attaches it to the workflow run and to the
+# GitHub release for the tag. Submit that file by hand at
+# https://cran.r-project.org/submit.html and confirm the email CRAN sends to
+# the maintainer address in r/DESCRIPTION.
+name: publish-r
+
+on:
+  push:
+    tags: ["r-v*"]
+
+permissions:
+  contents: write  # to attach the tarball to the GitHub release
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: r
+    steps:
+      - uses: actions/checkout@v4
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          use-public-rspm: true
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          working-directory: r
+          extra-packages: any::rcmdcheck
+          needs: check
+      - name: Check tag matches DESCRIPTION version
+        run: |
+          version=$(Rscript -e 'cat(read.dcf("DESCRIPTION", fields = "Version"))')
+          if [ "r-v$version" != "$GITHUB_REF_NAME" ]; then
+            echo "Tag $GITHUB_REF_NAME does not match version $version"; exit 1
+          fi
+          echo "VERSION=$version" >> "$GITHUB_ENV"
+      - name: Build
+        run: R CMD build .
+      - name: Check as CRAN
+        env:
+          _R_CHECK_CRAN_INCOMING_REMOTE_: false
+        run: R CMD check --as-cran --no-manual "sdcalc_${VERSION}.tar.gz"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sdcalc-cran-tarball
+          path: r/sdcalc_*.tar.gz
+      - name: Attach to GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1 \
+            || gh release create "$GITHUB_REF_NAME" --title "sdcalc $VERSION (R)" --notes "CRAN submission tarball for sdcalc $VERSION."
+          gh release upload "$GITHUB_REF_NAME" "sdcalc_${VERSION}.tar.gz" --clobber

@@ -1,0 +1,45 @@
+# Tells Packagist about a new PHP release when a tag like v0.1.0 is pushed.
+#
+# Packagist builds versions from git tags and ignores tags it cannot parse as
+# versions (such as php-v0.1.0), so PHP releases use plain vX.Y.Z tags.
+# Packagist serves GitHub's zipball of the tag, which contains the whole
+# repository; composer.json "archive.exclude" only affects `composer archive`.
+#
+# One-time setup: submit https://github.com/Ramesh-xyz/statistics-calculator-toolkit
+# at https://packagist.org/packages/submit while logged in as the maintainer.
+# Secrets: PACKAGIST_USERNAME, PACKAGIST_TOKEN (the "safe" API token from
+# https://packagist.org/profile/).
+name: publish-php
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.3"
+          coverage: none
+      - run: composer validate --strict
+      - run: composer install --no-interaction --no-progress
+      - run: composer test
+      - name: Check tag is plain semver
+        run: |
+          echo "$GITHUB_REF_NAME" | grep -Eq '^v[0-9]+\.[0-9]+\.[0-9]+$' \
+            || { echo "Tag $GITHUB_REF_NAME is not vX.Y.Z"; exit 1; }
+      - name: Notify Packagist
+        env:
+          PACKAGIST_USERNAME: ${{ secrets.PACKAGIST_USERNAME }}
+          PACKAGIST_TOKEN: ${{ secrets.PACKAGIST_TOKEN }}
+        run: |
+          curl -sf -o /dev/null -X POST \
+            -H 'Content-Type: application/json' \
+            "https://packagist.org/api/update-package?username=${PACKAGIST_USERNAME}&apiToken=${PACKAGIST_TOKEN}" \
+            -d '{"repository":{"url":"https://github.com/Ramesh-xyz/statistics-calculator-toolkit"}}'

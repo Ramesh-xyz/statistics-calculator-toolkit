@@ -1,0 +1,29 @@
+name: test-ruby
+
+on:
+  push:
+    paths: ["ruby/**", ".github/workflows/test-ruby.yml"]
+  pull_request:
+    paths: ["ruby/**", ".github/workflows/test-ruby.yml"]
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        ruby: ["3.0", "3.3", "3.4"]
+    defaults:
+      run:
+        working-directory: ruby
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby }}
+      - run: gem install minitest bigdecimal --no-document
+      - run: ruby -Ilib test/test_sdtoolkit.rb
+      - run: gem build sdtoolkit.gemspec

@@ -1,0 +1,16 @@
+[package]
+name = "sdtoolkit"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.60"
+description = "Mean, variance, standard deviation, coefficient of variation and RSD with input validation and a numerically stable two-pass algorithm"
+license = "MIT"
+authors = ["Ramesh-xyz"]
+readme = "README.md"
+homepage = "https://standarddeviationcalculator.net/"
+repository = "https://github.com/Ramesh-xyz/statistics-calculator-toolkit"
+keywords = ["statistics", "variance", "standard-deviation", "mean", "math"]
+categories = ["mathematics", "science"]
+include = ["src/**/*.rs", "tests/**/*.rs", "README.md", "LICENSE", "Cargo.toml"]
+
+[dependencies]

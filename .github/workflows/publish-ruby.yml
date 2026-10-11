@@ -1,0 +1,40 @@
+# Publishes the Ruby gem to RubyGems when a tag like ruby-v0.1.0 is pushed.
+#
+# Secret: RUBYGEMS_API_KEY — a rubygems.org API key with only the
+# "Push rubygem" scope (restrict it to the sdtoolkit gem after the first push).
+# If your rubygems.org account MFA level is "UI and API", key-based pushes
+# need an OTP and will fail; use "UI and gem signin" or switch this job to
+# trusted publishing (rubygems/configure-rubygems-credentials with id-token).
+name: publish-ruby
+
+on:
+  push:
+    tags: ["ruby-v*"]
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ruby
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.3"
+      - run: gem install minitest bigdecimal --no-document
+      - run: ruby -Ilib test/test_sdtoolkit.rb
+      - name: Check tag matches gem version
+        run: |
+          version=$(ruby -Ilib -e 'require "sdtoolkit/version"; print SDToolkit::VERSION')
+          if [ "ruby-v$version" != "$GITHUB_REF_NAME" ]; then
+            echo "Tag $GITHUB_REF_NAME does not match version $version"; exit 1
+          fi
+      - run: gem build sdtoolkit.gemspec
+      - name: Push to RubyGems
+        env:
+          GEM_HOST_API_KEY: ${{ secrets.RUBYGEMS_API_KEY }}
+        run: gem push sdtoolkit-*.gem

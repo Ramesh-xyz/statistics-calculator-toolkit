@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <LangVersion>latest</LangVersion>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+
+    <PackageId>SdToolkit</PackageId>
+    <Version>0.1.0</Version>
+    <Authors>Ramesh-xyz</Authors>
+    <Description>Dependency-free mean, variance, standard deviation, coefficient of variation and relative standard deviation with input validation and a numerically stable two-pass algorithm.</Description>
+    <PackageTags>statistics;standard-deviation;variance;coefficient-of-variation;rsd</PackageTags>
+    <PackageProjectUrl>https://standarddeviationcalculator.net/</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Ramesh-xyz/statistics-calculator-toolkit</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <Copyright>Copyright (c) Ramesh-xyz</Copyright>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="../../README.md" Pack="true" PackagePath="/" />
+  </ItemGroup>
+
+</Project>

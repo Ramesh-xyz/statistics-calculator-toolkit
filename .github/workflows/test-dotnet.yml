@@ -1,0 +1,24 @@
+name: test-dotnet
+
+on:
+  push:
+    paths: ["dotnet/**", ".github/workflows/test-dotnet.yml"]
+  pull_request:
+    paths: ["dotnet/**", ".github/workflows/test-dotnet.yml"]
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: dotnet
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "8.0.x"
+      - run: dotnet test tests/SdToolkit.Tests
+      - run: dotnet pack src/SdToolkit -c Release -o out

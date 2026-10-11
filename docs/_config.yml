@@ -1,0 +1,13 @@
+title: statistics-calculator-toolkit
+description: Standard deviation, variance and relative standard deviation with one API across ten languages.
+theme: minima
+url: https://ramesh-xyz.github.io
+baseurl: /statistics-calculator-toolkit
+header_pages:
+  - api.md
+  - python.md
+  - standard-deviation.md
+  - variance.md
+  - sample-vs-population.md
+  - relative-standard-deviation.md
+  - outliers.md
