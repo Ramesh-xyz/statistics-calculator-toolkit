@@ -47,8 +47,7 @@
             "!/composer.json",
             "!/LICENSE",
             "!/php",
-            "/php/tests",
-            "/php/LICENSE"
+            "/php/tests"
         ]
     }
 }
