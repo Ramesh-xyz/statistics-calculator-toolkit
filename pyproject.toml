@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sdtoolkit"
+version = "0.1.0"
+description = "Dependency-free standard deviation, variance and relative standard deviation for Python"
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+authors = [{ name = "Ramesh-xyz" }]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Topic :: Scientific/Engineering :: Mathematics",
+]
+
+[project.scripts]
+sdtoolkit = "sdtoolkit.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
