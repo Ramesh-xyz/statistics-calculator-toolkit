@@ -1,6 +1,7 @@
 name: publish-java
 
 on:
+  workflow_dispatch:
   push:
     tags: ["java-v*"]
 
@@ -10,6 +11,8 @@ permissions:
 jobs:
   publish:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     defaults:
       run:
         working-directory: java
@@ -25,15 +28,14 @@ jobs:
           server-password: CENTRAL_TOKEN_PASSWORD
           gpg-private-key: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
           gpg-passphrase: MAVEN_GPG_PASSPHRASE
-      - name: Check tag matches pom version
-        run: |
-          version=$(mvn -B -q help:evaluate -Dexpression=project.version -DforceStdout)
-          if [ "java-v$version" != "$GITHUB_REF_NAME" ]; then
-            echo "::error::tag $GITHUB_REF_NAME does not match pom version $version"
-            exit 1
-          fi
-      - name: Test, sign and publish to Maven Central
-        run: mvn -B -P release deploy
+      - run: mvn -B verify
+      - id: v
+        run: echo "version=$(mvn -B -q help:evaluate -Dexpression=project.version -DforceStdout)" >> "$GITHUB_OUTPUT"
+      - uses: ./.github/actions/create-tag
+        with:
+          tag: java-v${{ steps.v.outputs.version }}
+      - name: Sign and publish to Maven Central
+        run: mvn -B -P release deploy -DskipTests
         env:
           CENTRAL_TOKEN_USERNAME: ${{ secrets.CENTRAL_TOKEN_USERNAME }}
           CENTRAL_TOKEN_PASSWORD: ${{ secrets.CENTRAL_TOKEN_PASSWORD }}

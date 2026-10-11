@@ -1,7 +1,9 @@
 name: publish-js
 
-# Release: bump js/package.json, merge to main, then push a tag `js-vX.Y.Z`.
+# Release: bump js/package.json, merge to main, then run this workflow from
+# the Actions tab. It tags the commit `js-vX.Y.Z` and publishes.
 on:
+  workflow_dispatch:
   push:
     tags: ["js-v*"]
 
@@ -12,7 +14,7 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write # create the tag
       id-token: write # npm provenance
     defaults:
       run:
@@ -23,15 +25,13 @@ jobs:
         with:
           node-version: "22"
           registry-url: "https://registry.npmjs.org"
-      - name: Check tag matches package.json version
-        run: |
-          version=$(node -p "require('./package.json').version")
-          if [ "js-v$version" != "$GITHUB_REF_NAME" ]; then
-            echo "Tag $GITHUB_REF_NAME does not match package.json version $version"
-            exit 1
-          fi
       - run: npm test
       - run: npm pack --dry-run
+      - id: v
+        run: echo "version=$(node -p "require('./package.json').version")" >> "$GITHUB_OUTPUT"
+      - uses: ./.github/actions/create-tag
+        with:
+          tag: js-v${{ steps.v.outputs.version }}
       - run: npm publish --provenance --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

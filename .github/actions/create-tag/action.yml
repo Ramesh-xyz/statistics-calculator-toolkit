@@ -1,0 +1,28 @@
+name: create-tag
+description: >
+  Pushes the release tag at HEAD, or checks that it already points at HEAD.
+  On a tag-push run, fails if the pushed tag differs from the expected one.
+  Exports TAG for later steps. Needs `contents: write`.
+inputs:
+  tag:
+    description: Tag to create, such as js-v0.1.1
+    required: true
+runs:
+  using: composite
+  steps:
+    - shell: bash
+      env:
+        TAG: ${{ inputs.tag }}
+      run: |
+        if [ "$GITHUB_REF_TYPE" = tag ] && [ "$GITHUB_REF_NAME" != "$TAG" ]; then
+          echo "::error::tag $GITHUB_REF_NAME does not match the version ($TAG)"; exit 1
+        fi
+        if git fetch -q --depth=1 origin "refs/tags/$TAG:refs/tags/$TAG" 2>/dev/null; then
+          [ "$(git rev-parse "$TAG^{commit}")" = "$(git rev-parse HEAD)" ] \
+            || { echo "::error::$TAG already exists on another commit; bump the version"; exit 1; }
+          echo "$TAG already points at HEAD"
+        else
+          git tag "$TAG"
+          git push origin "refs/tags/$TAG"
+        fi
+        echo "TAG=$TAG" >> "$GITHUB_ENV"

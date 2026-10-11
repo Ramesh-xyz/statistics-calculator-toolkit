@@ -1,20 +1,19 @@
 # Releasing
 
-Every package is released on its own by pushing a tag. Each
-`.github/workflows/publish-<lang>.yml` runs that language's tests, fails if
-the tag does not match the version in the manifest, builds the artifact and
-publishes it. Nothing is ever published from a branch push.
+Every package is released on its own from the **Actions** tab. Each
+`.github/workflows/publish-<lang>.yml` runs that language's tests, then
+creates the release tag from the manifest version (Go and PHP: from the
+`version` input), pushes it, and publishes with that tag. If the tag already
+exists on a different commit the run fails; bump the version. Pushing the tag
+yourself still works and runs the same workflow.
 
 ## Release steps
 
 1. Bump the version in the manifest(s) listed below and add a
    `CHANGELOG.md` entry. Merge to `main`.
-2. Tag the merge commit and push the tag:
-
-   ```
-   git tag js-v0.1.1
-   git push origin js-v0.1.1
-   ```
+2. **Actions → publish-<lang> → Run workflow** on `main`
+   (`gh workflow run publish-js.yml`, or
+   `gh workflow run publish-go.yml -f version=0.1.1`).
 
 3. Watch the run under **Actions**, then check the registry page: version,
    README, homepage and repository links.
@@ -28,12 +27,12 @@ Add the secrets under **Settings → Secrets and variables → Actions**.
 | Python | `py-v0.1.0` | `pyproject.toml`, `src/sdtoolkit/__init__.py` | `PYPI_API_TOKEN` |
 | JavaScript | `js-v0.1.0` | `js/package.json` | `NPM_TOKEN` |
 | Rust | `rust-v0.1.0` | `rust/Cargo.toml` | `CARGO_REGISTRY_TOKEN` |
-| Go | `go/sdtoolkit/v0.1.0` | the tag itself | none |
+| Go | `go/sdtoolkit/v0.1.0` | `version` input | none |
 | R | `r-v0.1.0` | `r/DESCRIPTION` | none (see below) |
 | Java | `java-v0.1.0` | `java/pom.xml` | `CENTRAL_TOKEN_USERNAME`, `CENTRAL_TOKEN_PASSWORD`, `MAVEN_GPG_PRIVATE_KEY`, `MAVEN_GPG_PASSPHRASE` |
 | .NET | `dotnet-v0.1.0` | `dotnet/src/SdToolkit/SdToolkit.csproj` | `NUGET_API_KEY` |
 | Ruby | `ruby-v0.1.0` | `ruby/lib/sdtoolkit/version.rb` | `RUBYGEMS_API_KEY` |
-| PHP | `v0.1.0` | the tag itself | `PACKAGIST_USERNAME`, `PACKAGIST_TOKEN` |
+| PHP | `v0.1.0` | `version` input | `PACKAGIST_USERNAME`, `PACKAGIST_TOKEN` |
 | Dart | `dart-v0.1.0` | `dart/pubspec.yaml` | none (OIDC) |
 
 PHP uses plain `vX.Y.Z` tags because Packagist reads versions from tag names
@@ -78,7 +77,8 @@ triggers on `v*`.
   (`cd dart && dart pub publish`). Then on pub.dev → sdtoolkit → Admin →
   Automated publishing, enable GitHub Actions for
   `Ramesh-xyz/statistics-calculator-toolkit` with tag pattern
-  `dart-v{{version}}`.
+  `dart-v{{version}}`, and enable publishing from `workflow_dispatch`
+  events. The workflow re-runs itself on the new tag so pub.dev sees a tag ref.
 
 ## Documentation site
 

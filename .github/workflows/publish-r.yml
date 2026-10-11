@@ -1,4 +1,5 @@
-# Builds and checks the R package when a tag like r-v0.1.0 is pushed.
+# Builds and checks the R package. Run it from the Actions tab: it tags the
+# commit r-vX.Y.Z from r/DESCRIPTION first.
 #
 # CRAN has no upload API: this workflow does NOT submit to CRAN. It produces
 # a checked sdcalc_X.Y.Z.tar.gz, attaches it to the workflow run and to the
@@ -8,6 +9,7 @@
 name: publish-r
 
 on:
+  workflow_dispatch:
   push:
     tags: ["r-v*"]
 
@@ -30,19 +32,17 @@ jobs:
           working-directory: r
           extra-packages: any::rcmdcheck
           needs: check
-      - name: Check tag matches DESCRIPTION version
-        run: |
-          version=$(Rscript -e 'cat(read.dcf("DESCRIPTION", fields = "Version"))')
-          if [ "r-v$version" != "$GITHUB_REF_NAME" ]; then
-            echo "Tag $GITHUB_REF_NAME does not match version $version"; exit 1
-          fi
-          echo "VERSION=$version" >> "$GITHUB_ENV"
+      - name: Read version
+        run: echo "VERSION=$(Rscript -e 'cat(read.dcf("DESCRIPTION", fields = "Version"))')" >> "$GITHUB_ENV"
       - name: Build
         run: R CMD build .
       - name: Check as CRAN
         env:
           _R_CHECK_CRAN_INCOMING_REMOTE_: false
         run: R CMD check --as-cran --no-manual "sdcalc_${VERSION}.tar.gz"
+      - uses: ./.github/actions/create-tag
+        with:
+          tag: r-v${{ env.VERSION }}
       - uses: actions/upload-artifact@v4
         with:
           name: sdcalc-cran-tarball
@@ -51,6 +51,6 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1 \
-            || gh release create "$GITHUB_REF_NAME" --title "sdcalc $VERSION (R)" --notes "CRAN submission tarball for sdcalc $VERSION."
-          gh release upload "$GITHUB_REF_NAME" "sdcalc_${VERSION}.tar.gz" --clobber
+          gh release view "$TAG" >/dev/null 2>&1 \
+            || gh release create "$TAG" --title "sdcalc $VERSION (R)" --notes "CRAN submission tarball for sdcalc $VERSION."
+          gh release upload "$TAG" "sdcalc_${VERSION}.tar.gz" --clobber

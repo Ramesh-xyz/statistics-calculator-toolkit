@@ -1,4 +1,5 @@
-# Tells Packagist about a new PHP release when a tag like v0.1.0 is pushed.
+# Tells Packagist about a new PHP release. Run it from the Actions tab with the
+# new version: it tests, pushes the tag vX.Y.Z, then notifies Packagist.
 #
 # Packagist builds versions from git tags and ignores tags it cannot parse as
 # versions (such as php-v0.1.0), so PHP releases use plain vX.Y.Z tags.
@@ -12,6 +13,11 @@
 name: publish-php
 
 on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version to release, such as 0.1.1"
+        required: true
   push:
     tags: ["v*"]
 
@@ -21,6 +27,8 @@ permissions:
 jobs:
   publish:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
       - uses: shivammathur/setup-php@v2
@@ -30,10 +38,16 @@ jobs:
       - run: composer validate --strict
       - run: composer install --no-interaction --no-progress
       - run: composer test
-      - name: Check tag is plain semver
+      - id: v
+        env:
+          VERSION: ${{ inputs.version }}
         run: |
-          echo "$GITHUB_REF_NAME" | grep -Eq '^v[0-9]+\.[0-9]+\.[0-9]+$' \
-            || { echo "Tag $GITHUB_REF_NAME is not vX.Y.Z"; exit 1; }
+          if [ "$GITHUB_REF_TYPE" = tag ]; then VERSION="${GITHUB_REF_NAME#v}"; fi
+          echo "$VERSION" | grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+$' || { echo "::error::$VERSION is not X.Y.Z"; exit 1; }
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+      - uses: ./.github/actions/create-tag
+        with:
+          tag: v${{ steps.v.outputs.version }}
       - name: Notify Packagist
         env:
           PACKAGIST_USERNAME: ${{ secrets.PACKAGIST_USERNAME }}
