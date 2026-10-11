@@ -1,5 +1,16 @@
 # Changelog
 
+## Unreleased
+
+- New implementations with the same API, algorithm and test vectors:
+  JavaScript/TypeScript (`js/`), Rust (`rust/`), Go (`go/sdtoolkit/`),
+  R (`r/`, package `sdcalc`), Java (`java/`), C#/.NET (`dotnet/`),
+  Ruby (`ruby/`), PHP (`php/`) and Dart (`dart/`).
+- Tag-triggered publish workflows for every registry; see `RELEASING.md`.
+- GitHub Pages documentation site built from `docs/`, including the
+  cross-language API contract in `docs/api.md`.
+- Python: PyPI project URLs, SPDX license metadata.
+
 ## 0.1.0 - 2026-10-11
 
 First release.

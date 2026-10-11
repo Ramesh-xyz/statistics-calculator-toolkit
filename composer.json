@@ -1,0 +1,54 @@
+{
+    "name": "ramesh-xyz/sdtoolkit",
+    "description": "Population and sample standard deviation, variance, sum of squares, relative standard deviation and coefficient of variation",
+    "type": "library",
+    "license": "MIT",
+    "keywords": [
+        "statistics",
+        "standard deviation",
+        "variance",
+        "coefficient of variation"
+    ],
+    "homepage": "https://standarddeviationcalculator.net/",
+    "authors": [
+        {
+            "name": "Ramesh-xyz",
+            "homepage": "https://github.com/Ramesh-xyz"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/Ramesh-xyz/statistics-calculator-toolkit/issues",
+        "source": "https://github.com/Ramesh-xyz/statistics-calculator-toolkit",
+        "docs": "https://ramesh-xyz.github.io/statistics-calculator-toolkit/"
+    },
+    "require": {
+        "php": ">=8.1"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^10.5 || ^11.0 || ^12.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "RameshXyz\\SdToolkit\\": "php/src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "RameshXyz\\SdToolkit\\Tests\\": "php/tests/"
+        }
+    },
+    "scripts": {
+        "test": "phpunit php/tests"
+    },
+    "archive": {
+        "exclude": [
+            "/*",
+            "/.*",
+            "!/composer.json",
+            "!/LICENSE",
+            "!/php",
+            "/php/tests",
+            "/php/LICENSE"
+        ]
+    }
+}

@@ -1,0 +1,42 @@
+{
+  "name": "sdtoolkit",
+  "version": "0.1.0",
+  "description": "Dependency-free standard deviation, variance, coefficient of variation and relative standard deviation with input validation",
+  "type": "module",
+  "main": "./index.js",
+  "types": "./index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "default": "./index.js"
+    }
+  },
+  "files": [
+    "index.js",
+    "index.d.ts"
+  ],
+  "scripts": {
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": [
+    "statistics",
+    "standard-deviation",
+    "variance",
+    "coefficient-of-variation",
+    "relative-standard-deviation"
+  ],
+  "homepage": "https://standarddeviationcalculator.net/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ramesh-xyz/statistics-calculator-toolkit.git",
+    "directory": "js"
+  },
+  "bugs": {
+    "url": "https://github.com/Ramesh-xyz/statistics-calculator-toolkit/issues"
+  },
+  "author": "Ramesh-xyz",
+  "license": "MIT"
+}

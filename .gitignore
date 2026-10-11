@@ -6,3 +6,22 @@ dist/
 .venv/
 venv/
 .DS_Store
+# per-language build output
+/vendor/
+/composer.lock
+.phpunit.result.cache
+.phpunit.cache/
+node_modules/
+target/
+.dart_tool/
+pubspec.lock
+bin/
+obj/
+*.gem
+*.tar.gz
+*.Rcheck/
+# local agent tooling
+agentdb.rvf*
+ruvector.db
+.swarm/
+.claude-flow/

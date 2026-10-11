@@ -1,0 +1,32 @@
+name: test-rust
+
+on:
+  push:
+    paths: ["rust/**", ".github/workflows/test-rust.yml"]
+  pull_request:
+    paths: ["rust/**", ".github/workflows/test-rust.yml"]
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        toolchain: ["1.60", "stable"]
+    defaults:
+      run:
+        working-directory: rust
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: ${{ matrix.toolchain }}
+          components: clippy, rustfmt
+      - run: cargo test
+      - if: matrix.toolchain == 'stable'
+        run: cargo fmt --check && cargo clippy --all-targets -- -D warnings
+      - if: matrix.toolchain == 'stable'
+        run: cargo package --list && cargo publish --dry-run

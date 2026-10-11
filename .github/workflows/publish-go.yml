@@ -1,0 +1,33 @@
+name: publish-go
+
+# Go has no upload step: a module version is the git tag
+# go/sdtoolkit/vX.Y.Z. This workflow tests the tagged commit, then asks
+# proxy.golang.org for that version so pkg.go.dev indexes it.
+on:
+  push:
+    tags: ["go/sdtoolkit/v*"]
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: go/sdtoolkit
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: stable
+          cache: false
+      - run: go vet ./... && go test -v ./...
+      - name: Fetch the version through the module proxy
+        env:
+          MODULE: github.com/Ramesh-xyz/statistics-calculator-toolkit/go/sdtoolkit
+        run: |
+          version="${GITHUB_REF_NAME#go/sdtoolkit/}"
+          cd "$RUNNER_TEMP"
+          GOPROXY=https://proxy.golang.org GO111MODULE=on go list -m "$MODULE@$version"
+          echo "https://pkg.go.dev/$MODULE@$version"

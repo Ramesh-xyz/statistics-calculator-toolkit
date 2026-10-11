@@ -1,0 +1,27 @@
+name: publish-rust
+
+on:
+  push:
+    tags: ["rust-v*"]
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: rust
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - run: cargo test
+      - name: Check tag matches Cargo.toml version
+        run: |
+          manifest="$(cargo metadata --no-deps --format-version 1 | python3 -c 'import json,sys; print(json.load(sys.stdin)["packages"][0]["version"])')"
+          test "rust-v$manifest" = "$GITHUB_REF_NAME" || { echo "tag $GITHUB_REF_NAME != rust-v$manifest"; exit 1; }
+      - run: cargo package --list
+      - run: cargo publish
+        env:
+          CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN }}

@@ -1,0 +1,21 @@
+name: sdtoolkit
+description: >-
+  Standard deviation, variance, sum of squares, coefficient of variation and
+  relative standard deviation with input validation and compensated summation.
+version: 0.1.0
+homepage: https://standarddeviationcalculator.net/
+repository: https://github.com/Ramesh-xyz/statistics-calculator-toolkit/tree/main/dart
+issue_tracker: https://github.com/Ramesh-xyz/statistics-calculator-toolkit/issues
+documentation: https://ramesh-xyz.github.io/statistics-calculator-toolkit/
+topics:
+  - statistics
+  - math
+  - standard-deviation
+  - variance
+
+environment:
+  sdk: ^3.5.0
+
+dev_dependencies:
+  lints: ^5.0.0
+  test: ^1.24.0
