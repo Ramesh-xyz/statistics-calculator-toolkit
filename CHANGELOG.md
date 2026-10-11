@@ -10,6 +10,8 @@
 - GitHub Pages documentation site built from `docs/`, including the
   cross-language API contract in `docs/api.md`.
 - Python: PyPI project URLs, SPDX license metadata.
+- JavaScript 0.1.1: same code as 0.1.0, released through the publish
+  workflow that creates its own tag.
 
 ## 0.1.0 - 2026-10-11
 
