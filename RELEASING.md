@@ -46,8 +46,10 @@ triggers on `v*`.
   account-wide token; replace it with a project-scoped one afterwards).
   Trusted publishing is an alternative: add a publisher for workflow
   `publish-python.yml`, environment `pypi`, then delete the `password:` line.
-- **npm:** create a granular access token with publish rights for
-  `sdtoolkit`. Provenance is attached automatically.
+- **npm:** the package is `@rameshxyz/sdtoolkit`; npm refused the unscoped
+  name `sdtoolkit` as too similar to `es-toolkit`. Create a granular access
+  token with read-and-write access to all packages and "Bypass two-factor
+  authentication" ticked. Provenance is attached automatically.
 - **crates.io:** log in with GitHub, create a token with the `publish-new`
   and `publish-update` scopes.
 - **Go:** nothing. The workflow asks proxy.golang.org for the new version so

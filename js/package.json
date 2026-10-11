@@ -1,5 +1,5 @@
 {
-  "name": "sdtoolkit",
+  "name": "@rameshxyz/sdtoolkit",
   "version": "0.1.0",
   "description": "Dependency-free standard deviation, variance, coefficient of variation and relative standard deviation with input validation",
   "type": "module",

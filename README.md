@@ -25,7 +25,7 @@ Documentation: <https://ramesh-xyz.github.io/statistics-calculator-toolkit/>
 | language | directory | registry | install |
 |---|---|---|---|
 | Python | [`src/sdtoolkit`](src/sdtoolkit) | PyPI | `pip install sdtoolkit` |
-| JavaScript / TypeScript | [`js`](js) | npm | `npm install sdtoolkit` |
+| JavaScript / TypeScript | [`js`](js) | npm | `npm install @rameshxyz/sdtoolkit` |
 | Rust | [`rust`](rust) | crates.io | `cargo add sdtoolkit` |
 | Go | [`go/sdtoolkit`](go/sdtoolkit) | Go modules | `go get github.com/Ramesh-xyz/statistics-calculator-toolkit/go/sdtoolkit` |
 | R | [`r`](r) | CRAN | `install.packages("sdcalc")` |

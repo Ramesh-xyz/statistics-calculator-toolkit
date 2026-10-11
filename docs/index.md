@@ -18,7 +18,7 @@ floating-point notes.
 | language | registry | install | docs |
 |---|---|---|---|
 | Python | PyPI | `pip install sdtoolkit` | [Python guide](python.md) |
-| JavaScript / TypeScript | npm | `npm install sdtoolkit` | [README](https://github.com/Ramesh-xyz/statistics-calculator-toolkit/tree/main/js) |
+| JavaScript / TypeScript | npm | `npm install @rameshxyz/sdtoolkit` | [README](https://github.com/Ramesh-xyz/statistics-calculator-toolkit/tree/main/js) |
 | Rust | crates.io | `cargo add sdtoolkit` | [README](https://github.com/Ramesh-xyz/statistics-calculator-toolkit/tree/main/rust), [docs.rs](https://docs.rs/sdtoolkit) |
 | Go | Go modules | `go get github.com/Ramesh-xyz/statistics-calculator-toolkit/go/sdtoolkit` | [README](https://github.com/Ramesh-xyz/statistics-calculator-toolkit/tree/main/go/sdtoolkit), [pkg.go.dev](https://pkg.go.dev/github.com/Ramesh-xyz/statistics-calculator-toolkit/go/sdtoolkit) |
 | R | CRAN | `install.packages("sdcalc")` | [README](https://github.com/Ramesh-xyz/statistics-calculator-toolkit/tree/main/r) |

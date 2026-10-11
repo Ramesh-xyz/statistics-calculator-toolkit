@@ -10,13 +10,13 @@ Invalid input throws a `StatisticsError` instead of returning `NaN`.
 ## Install
 
 ```
-npm install sdtoolkit
+npm install @rameshxyz/sdtoolkit
 ```
 
 ## Usage
 
 ```js
-import * as sd from "sdtoolkit";
+import * as sd from "@rameshxyz/sdtoolkit";
 
 const data = [2, 4, 4, 4, 5, 5, 7, 9];
 sd.mean(data);                                   // 5
@@ -69,7 +69,7 @@ Missing values are never skipped. Clean or impute your data first so the
 choice is visible in your code.
 
 ```js
-import { mean, StatisticsError } from "sdtoolkit";
+import { mean, StatisticsError } from "@rameshxyz/sdtoolkit";
 try {
   mean([1, null, 3]);
 } catch (e) {
