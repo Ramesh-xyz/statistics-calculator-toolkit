@@ -1,0 +1,13 @@
+# Illustrative datasets for trying sdtoolkit. Invented for teaching; NOT real research or measurement data.
+# lab_replicate_mg_l: ten replicate readings of one sample (mg/L); exam_score: ten exam scores out of 100; daily_temp_c: ten daily mean temperatures (deg C)
+lab_replicate_mg_l,exam_score,daily_temp_c
+12.41,72,14.2
+12.38,85,15.8
+12.45,64,13.9
+12.40,91,16.4
+12.36,78,17.1
+12.43,69,15.0
+12.39,88,12.7
+12.44,75,14.8
+12.37,82,16.0
+12.42,70,15.5
