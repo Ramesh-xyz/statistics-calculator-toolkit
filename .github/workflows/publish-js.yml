@@ -1,8 +1,12 @@
 name: publish-js
 
+# Release: bump js/package.json, then either push a tag `js-vX.Y.Z` or run
+# this workflow from the Actions tab on main (it tags the commit after
+# publishing).
 on:
   push:
     tags: ["js-v*"]
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -11,7 +15,7 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write # create the js-v tag on manual runs
       id-token: write # npm provenance
     defaults:
       run:
@@ -25,7 +29,10 @@ jobs:
       - name: Check tag matches package.json version
         run: |
           version=$(node -p "require('./package.json').version")
-          if [ "js-v$version" != "$GITHUB_REF_NAME" ]; then
+          echo "VERSION=$version" >> "$GITHUB_ENV"
+          if [ "$GITHUB_EVENT_NAME" != push ]; then
+            [ "$GITHUB_REF_NAME" = main ] || { echo "manual runs must use main"; exit 1; }
+          elif [ "js-v$version" != "$GITHUB_REF_NAME" ]; then
             echo "Tag $GITHUB_REF_NAME does not match package.json version $version"
             exit 1
           fi
@@ -34,3 +41,8 @@ jobs:
       - run: npm publish --provenance --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Tag the release
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          git tag "js-v$VERSION"
+          git push origin "js-v$VERSION"
