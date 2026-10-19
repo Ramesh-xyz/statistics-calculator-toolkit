@@ -1,9 +1,24 @@
-# Standard deviation in finance
-
-Most risk numbers quoted for a stock or a fund are the standard deviation of
-its returns, rescaled or divided by something. Volatility, the Sharpe ratio,
-beta and a simple value at risk all start from the same two quantities that
-sdtoolkit computes: the mean and the sample standard deviation.
+---
+layout: article
+title: Standard deviation in finance
+description: Volatility, the Sharpe ratio, beta and value at risk, each worked from the same ten daily returns with the sample standard deviation.
+kicker: Guide · Risk measures
+lede: "Most risk numbers quoted for a stock or a fund are the standard deviation of its returns, rescaled or divided by something. Volatility, the Sharpe ratio, beta and a simple value at risk all start from the same two quantities that sdtoolkit computes: the mean and the sample standard deviation."
+returns: [[1.2, 0.8], [-0.8, -0.5], [0.5, 0.3], [2.1, 1.2], [-1.5, -1.1], [0.9, 0.6], [-0.3, -0.2], [1.4, 0.9], [-0.6, -0.4], [0.7, 0.4]]
+stats:
+  - label: Annual volatility
+    value: "17.9 %"
+    note: daily SD × √252
+  - label: Sharpe ratio
+    value: "4.79"
+    note: annualised
+  - label: Beta
+    value: "1.54"
+    note: vs the index
+  - label: 95 % one-day VaR
+    value: "−1.49 %"
+    note: mean − 1.645 SD
+---
 
 ## The data
 
