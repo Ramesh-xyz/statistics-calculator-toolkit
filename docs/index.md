@@ -53,6 +53,7 @@ language:
 - [Sample vs population](sample-vs-population.md): when to divide by n − 1
 - [Relative standard deviation](relative-standard-deviation.md): comparing spread across scales
 - [Outliers](outliers.md): how single extreme values inflate the SD
+- [Standard deviation in finance](standard-deviation-in-finance.md): volatility, Sharpe ratio, beta and value at risk
 
 ## Source and issues
 
