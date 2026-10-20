@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  {%- seo -%}
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+  <style>
+    :root {
+      --paper: #f6f3ec;
+      --card: #fffdf8;
+      --ink: #16181d;
+      --muted: #5c6068;
+      --rule: #dcd6c8;
+      --accent: #0f6b4f;
+      --accent-soft: #e2efe8;
+      --down: #b3261e;
+      --code-bg: #1b1e24;
+      --code-ink: #e6e3da;
+      --serif: "Fraunces", Georgia, serif;
+      --sans: "IBM Plex Sans", system-ui, sans-serif;
+      --mono: "IBM Plex Mono", ui-monospace, monospace;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --paper: #121418;
+        --card: #1a1d22;
+        --ink: #ece8de;
+        --muted: #a2a59f;
+        --rule: #2d3138;
+        --accent: #5fc79c;
+        --accent-soft: #1d2e27;
+        --down: #f08a80;
+        --code-bg: #0b0c0f;
+      }
+    }
+    * { box-sizing: border-box; }
+    html { -webkit-text-size-adjust: 100%; }
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font: 400 17px/1.7 var(--sans);
+    }
+    a { color: var(--accent); text-underline-offset: 3px; text-decoration-thickness: 1px; }
+    a:hover { text-decoration-thickness: 2px; }
+    a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+    .bar {
+      border-bottom: 1px solid var(--rule);
+      font-size: 14px;
+    }
+    .bar .wrap { display: flex; flex-wrap: wrap; gap: 8px 20px; align-items: center; justify-content: space-between; padding-top: 14px; padding-bottom: 14px; }
+    .bar .home { font-family: var(--mono); font-weight: 500; color: var(--ink); text-decoration: none; }
+    .bar nav { display: flex; gap: 18px; }
+    .bar nav a { color: var(--muted); text-decoration: none; }
+    .bar nav a:hover { color: var(--ink); }
+
+    .wrap { max-width: 1040px; margin: 0 auto; padding-left: 16px; padding-right: 16px; }
+
+    .hero { padding-top: 56px; padding-bottom: 36px; }
+    .hero-grid > * { min-width: 0; }
+    .hero-grid { display: grid; grid-template-columns: 1fr; gap: 32px; align-items: end; }
+    @media (min-width: 860px) { .hero-grid { grid-template-columns: 1.35fr 1fr; } }
+    .kicker {
+      font: 500 13px/1 var(--mono);
+      letter-spacing: .08em;
+      color: var(--accent);
+      margin: 0 0 18px;
+    }
+    h1 {
+      font: 700 clamp(38px, 6vw, 64px)/1.04 var(--serif);
+      letter-spacing: -.02em;
+      margin: 0 0 20px;
+    }
+    .lede { font-size: 19px; color: var(--muted); max-width: 38em; margin: 0; }
+
+    .chart { background: var(--card); border: 1px solid var(--rule); padding: 18px 18px 12px; }
+    .chart svg { display: block; width: 100%; height: auto; }
+    .chart .stock { fill: var(--accent); }
+    .chart .market { fill: var(--muted); opacity: .45; }
+    .chart .axis { stroke: var(--rule); }
+    .chart figcaption { display: flex; gap: 16px; font: 12px/1.4 var(--mono); color: var(--muted); margin-top: 10px; }
+    .chart figcaption span::before { content: ""; display: inline-block; width: 10px; height: 10px; margin-right: 6px; vertical-align: -1px; }
+    .chart .k-stock::before { background: var(--accent); }
+    .chart .k-market::before { background: var(--muted); opacity: .45; }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      border-top: 1px solid var(--ink);
+      border-bottom: 1px solid var(--rule);
+      margin: 0 0 56px;
+    }
+    @media (min-width: 760px) { .stats { grid-template-columns: repeat(4, 1fr); } }
+    .stat { padding: 20px 16px 20px 0; }
+    .stat + .stat { padding-left: 16px; border-left: 1px solid var(--rule); }
+    @media (max-width: 759px) {
+      .stat:nth-child(3) { padding-left: 0; border-left: 0; }
+      .stat:nth-child(n+3) { border-top: 1px solid var(--rule); }
+    }
+    .stat dt { font-size: 13px; color: var(--muted); }
+    .stat dd { margin: 0; }
+    .stat .v { display: block; font: 500 clamp(26px, 4vw, 34px)/1.2 var(--mono); letter-spacing: -.02em; margin: 6px 0 2px; }
+    .stat .v.down { color: var(--down); }
+    .stat .n { font: 12px/1.4 var(--mono); color: var(--muted); }
+
+    .body { max-width: 720px; padding-bottom: 72px; }
+    .body h2 {
+      font: 700 30px/1.2 var(--serif);
+      letter-spacing: -.01em;
+      margin: 56px 0 14px;
+      padding-top: 18px;
+      border-top: 1px solid var(--rule);
+    }
+    .body h2:first-child { margin-top: 0; }
+    .body p { margin: 0 0 18px; }
+    .body table {
+      display: block;
+      overflow-x: auto;
+      border-collapse: collapse;
+      margin: 8px 0 26px;
+      font-size: 15px;
+      max-width: 100%;
+    }
+    .body th, .body td { padding: 9px 22px 9px 0; text-align: left; border-bottom: 1px solid var(--rule); white-space: nowrap; }
+    .body th { font: 500 12px/1.4 var(--mono); letter-spacing: .05em; color: var(--muted); border-bottom-color: var(--ink); }
+    .body td { font-variant-numeric: tabular-nums; }
+    .body code { font: 14px/1.6 var(--mono); }
+    .body p code, .body li code { background: var(--accent-soft); padding: 1px 5px; }
+    .body pre {
+      background: var(--code-bg);
+      color: var(--code-ink);
+      padding: 18px 20px;
+      margin: 8px 0 26px;
+      overflow-x: auto;
+      border-left: 3px solid var(--accent);
+    }
+    .body pre code { background: none; padding: 0; }
+    .highlight .c, .highlight .c1, .highlight .gp { color: #8b8f87; }
+    .highlight .mf, .highlight .mi, .highlight .m { color: #e9b872; }
+    .highlight .k, .highlight .kn, .highlight .ow { color: #7fd1ae; }
+    .highlight .nb, .highlight .nf { color: #9cc4f0; }
+    .highlight .go { color: #c8c4b8; }
+
+    footer { border-top: 1px solid var(--rule); font-size: 14px; color: var(--muted); }
+    footer .wrap { padding-top: 22px; padding-bottom: 28px; }
+  </style>
+</head>
+<body>
+  <header class="bar">
+    <div class="wrap">
+      <a class="home" href="{{ '/' | relative_url }}">{{ site.title }}</a>
+      <nav aria-label="Site">
+        <a href="{{ '/' | relative_url }}#guides">Guides</a>
+        <a href="{{ '/api.html' | relative_url }}">API</a>
+        <a href="https://github.com/Ramesh-xyz/statistics-calculator-toolkit">GitHub</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero wrap">
+      <div class="hero-grid">
+        <div>
+          <p class="kicker">{{ page.kicker }}</p>
+          <h1>{{ page.title }}</h1>
+          <p class="lede">{{ page.lede }}</p>
+        </div>
+        {%- if page.returns -%}
+        <figure class="chart" style="margin:0">
+          <svg viewBox="0 0 300 110" role="img" aria-label="Ten daily returns, stock against market">
+            <line class="axis" x1="0" y1="55" x2="300" y2="55"/>
+            {%- for r in page.returns -%}
+              {%- assign x = forloop.index0 | times: 30 | plus: 4 -%}
+              {%- assign hs = r[0] | abs | times: 22 -%}
+              {%- assign hm = r[1] | abs | times: 22 -%}
+              {%- if r[0] < 0 -%}{%- assign ys = 55 -%}{%- else -%}{%- assign ys = 55 | minus: hs -%}{%- endif -%}
+              {%- if r[1] < 0 -%}{%- assign ym = 55 -%}{%- else -%}{%- assign ym = 55 | minus: hm -%}{%- endif %}
+            <rect class="stock" x="{{ x }}" y="{{ ys }}" width="11" height="{{ hs }}"/>
+            <rect class="market" x="{{ x | plus: 12 }}" y="{{ ym }}" width="11" height="{{ hm }}"/>
+            {%- endfor %}
+          </svg>
+          <figcaption><span class="k-stock">stock</span><span class="k-market">market</span><span>daily return, %</span></figcaption>
+        </figure>
+        {%- endif -%}
+      </div>
+    </section>
+
+    {%- if page.stats %}
+    <div class="wrap">
+      <dl class="stats">
+        {%- for s in page.stats %}
+        <div class="stat">
+          <dt>{{ s.label }}</dt>
+          <dd><span class="v{% if s.value contains '−' %} down{% endif %}">{{ s.value }}</span><span class="n">{{ s.note }}</span></dd>
+        </div>
+        {%- endfor %}
+      </dl>
+    </div>
+    {%- endif %}
+
+    <div class="wrap">
+      <article class="body">
+        {{ content }}
+      </article>
+    </div>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      MIT licensed · <a href="https://github.com/Ramesh-xyz/statistics-calculator-toolkit">source on GitHub</a> ·
+      interactive tools at <a href="https://standarddeviationcalculator.net/">standarddeviationcalculator.net</a>
+    </div>
+  </footer>
+</body>
+</html>
